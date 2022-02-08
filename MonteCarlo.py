@@ -1,6 +1,3 @@
-import os
-os.chdir('dispersion_analysis')
-
 from datetime import datetime
 from time import process_time, perf_counter, time
 import glob
@@ -142,8 +139,7 @@ def export_flight_error(flight_setting):
 
 # Basic analysis info
 filename = 'dispersion_analysis_outputs/valetudo_rocket_v0'
-number_of_simulations = 20000
-
+number_of_simulations = 100
 # Create data files for inputs, outputs and error logging
 dispersion_error_file = open(str(filename)+'.disp_errors.txt', 'w')
 dispersion_input_file = open(str(filename)+'.disp_inputs.txt', 'w')
