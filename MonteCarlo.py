@@ -22,11 +22,12 @@ mpl.rcParams['figure.titlesize'] = 14
 
 analysis_parameters = {
     # Mass Details
-    "rocketMass": (8.257, 0.001), # Rocket's dry mass (kg) and its uncertainty (standard deviation)
+    "rocketMass": (42.590, 0.001), # Rocket's dry mass (kg) and its uncertainty (standard deviation)
 
     # Propulsion Details - run help(SolidMotor) for more information
-    "impulse": (1415.15, 35.3),                         # Motor total impulse (N*s)
-    "burnOut": (5.274, 1),                              # Motor burn out time (s)
+    # Sporadic Impulse values of 08/02/22 (impulse, burnOut)
+    "impulse": (14070, 35.3),                         # Motor total impulse (N*s)
+    "burnOut": (14.3, 1),                              # Motor burn out time (s)
     "nozzleRadius": (21.642/1000, 0.5/1000),            # Motor's nozzle radius (m)
     "throatRadius": (8/1000, 0.5/1000) ,                # Motor's nozzle throat radius (m)
     "grainSeparation": (6/1000, 1/1000),                # Motor's grain separation (axial distance between two grains) (m)
@@ -51,14 +52,21 @@ analysis_parameters = {
     "finDistanceToCM": (-0.906, 0.001),                 # Axial distance between rocket's center of dry mass and nearest point in its fin (m)
 
     # Launch and Environment Details - run help(Environment) and help(Flight) for more information
-    "inclination": (84.7, 1),                           # Launch rail inclination angle relative to the horizontal plane (degrees)
-    "heading": (53, 2),                                 # Launch rail heading relative to north (degrees)
-    "railLength": (5.7 , 0.0005),                       # Launch rail length (m)
+    # Sporadic Impulse values of 08/02/22 (inclanation, heading, rail length)
+    "inclination": (85, 1),                           # Launch rail inclination angle relative to the horizontal plane (degrees)
+    "heading": (90, 2),                                 # Launch rail heading relative to north (degrees)
+    "railLength": (12 , 0.0005),                       # Launch rail length (m)
     "ensembleMember": list(range(10)),                  # Members of the ensemble forecast to be used
 
     # Parachute Details - run help(Rocket) for more information
-    "CdSDrogue": (0.349*1.3, 0.07),                     # Drag coefficient times reference area for the drogue chute (m^2)
+    # Sporadic Impulse values of 08/02/22 (CdSDrogue)
+    "CdSDrogue": (0.9*0.656, 0.07),                     # Drag coefficient times reference area for the drogue chute (m^2)
     "lag_rec": (1 , 0.5),                               # Time delay between parachute ejection signal is detected and parachute is inflated (s)
+    
+    # Parachute Details - run help(Rocket) for more information
+    # Sporadic Impulse values of 08/02/22 (CdSDrogue)
+    "CdSMain": (0.9*0.656, 0.07),                     # Drag coefficient times reference area for the drogue chute (m^2)
+    #"lag_rec": (1 , 0.5),                               # Time delay between parachute ejection signal is detected and parachute is inflated (s)
 
     # Electronic Systems Details - run help(Rocket) for more information
     "lag_se": (0.73, 0.16)                              # Time delay between sensor signal is received and ejection signal is fired (s)
@@ -173,6 +181,12 @@ def drogueTrigger(p, y):
     # Return true to activate parachute once the vertical velocity is negative
     return True if vertical_velocity < 0 else False
 
+def mainTrigger(p, y):
+    # Check if rocket is going down, i.e. if it has passed the apogee
+    vertical_velocity = y[5]
+    # Return true to activate parachute once the vertical velocity is negative
+    return True if vertical_velocity < 0 and y[2] < 800 else False #Opening based on height
+
 # Iterate over flight settings
 out = display('Starting', display_id=True)
 for setting in flight_settings(analysis_parameters, number_of_simulations):
@@ -236,6 +250,16 @@ for setting in flight_settings(analysis_parameters, number_of_simulations):
         samplingRate=105,
         lag=setting['lag_rec'] + setting['lag_se'],
         noise=(0, 8.3, 0.5)
+    )
+    
+    # Add parachute
+    Main = Valetudo.addParachute(
+        'Main',
+       CdS=setting['CdSMain'],
+       trigger=mainTrigger,
+       samplingRate=105,
+       lag=setting['lag_rec'] + setting['lag_se'],
+       noise=(0, 8.3, 0.5)
     )
 
     # Run trajectory simulation
