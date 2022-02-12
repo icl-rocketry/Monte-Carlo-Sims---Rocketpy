@@ -185,7 +185,7 @@ def mainTrigger(p, y):
     # Check if rocket is going down, i.e. if it has passed the apogee
     vertical_velocity = y[5]
     # Return true to activate parachute once the vertical velocity is negative
-    return True if vertical_velocity < 0 and y[2] < 800 else False #Opening based on height
+    return True if vertical_velocity < 0 and y[2] < 500 else False #Opening based on height
 
 # Iterate over flight settings
 out = display('Starting', display_id=True)
