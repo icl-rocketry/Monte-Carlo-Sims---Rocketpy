@@ -146,7 +146,7 @@ def export_flight_error(flight_setting):
 
 
 # Basic analysis info
-filename = 'dispersion_analysis_outputs/valetudo_rocket_v0'
+filename = 'dispersion_analysis_outputs/SporadicImpulse_rocket_v0'
 number_of_simulations = 10
 # Create data files for inputs, outputs and error logging
 dispersion_error_file = open(str(filename)+'.disp_errors.txt', 'w')
@@ -174,7 +174,7 @@ Env.setAtmosphericModel(
     dictionary="ECMWF"
 )
 
-# Set up parachutes. This rocket, named Valetudo, only has a drogue chute.
+# Set up parachutes. This rocket, named Sporadic Impulse, only has a drogue chute.
 def drogueTrigger(p, y):
     # Check if rocket is going down, i.e. if it has passed the apogee
     vertical_velocity = y[5]
@@ -198,8 +198,8 @@ for setting in flight_settings(analysis_parameters, number_of_simulations):
     Env.railLength = setting['railLength']
 
     # Create motor
-    Keron =  SolidMotor(
-        thrustSource='dispersion_analysis_inputs/thrustCurve.csv',
+    Hypnos =  SolidMotor(
+        thrustSource='dispersion_analysis_inputs/ThrustyBoi.csv',
         burnOut=5.274,
         reshapeThrustCurve=(setting['burnOut'], setting['impulse']),
         nozzleRadius=setting['nozzleRadius'],
@@ -214,8 +214,8 @@ for setting in flight_settings(analysis_parameters, number_of_simulations):
     )
 
     # Create rocket
-    Valetudo = Rocket(
-        motor=Keron,
+    SporadicImpulse = Rocket(
+        motor=Hypnos,
         radius=setting['radius'],
         mass=setting['rocketMass'],
         inertiaI=setting['inertiaI'],
@@ -225,17 +225,17 @@ for setting in flight_settings(analysis_parameters, number_of_simulations):
         powerOffDrag='dispersion_analysis_inputs/Cd_PowerOff.csv',
         powerOnDrag='dispersion_analysis_inputs/Cd_PowerOn.csv'
     )
-    Valetudo.setRailButtons([0.224, -0.93], 30)
+    SporadicImpulse.setRailButtons([0.224, -0.93], 30)
     # Edit rocket drag
-    Valetudo.powerOffDrag *= setting["powerOffDrag"]
-    Valetudo.powerOnDrag *= setting["powerOnDrag"]
+    SporadicImpulse.powerOffDrag *= setting["powerOffDrag"]
+    SporadicImpulse.powerOnDrag *= setting["powerOnDrag"]
     # Add rocket nose, fins and tail
-    NoseCone = Valetudo.addNose(
+    NoseCone = SporadicImpulse.addNose(
         length=setting['noseLength'],
         kind='vonKarman',
         distanceToCM=setting['noseDistanceToCM']
     )
-    FinSet = Valetudo.addFins(
+    FinSet = SporadicImpulse.addFins(
         n=3,
         rootChord=setting['finRootChord'],
         tipChord=setting['finTipChord'],
@@ -243,7 +243,7 @@ for setting in flight_settings(analysis_parameters, number_of_simulations):
         distanceToCM=setting['finDistanceToCM']
     )
     # Add parachute
-    Drogue = Valetudo.addParachute(
+    Drogue = SporadicImpulse.addParachute(
         'Drogue',
         CdS=setting['CdSDrogue'],
         trigger=drogueTrigger,
@@ -253,7 +253,7 @@ for setting in flight_settings(analysis_parameters, number_of_simulations):
     )
     
     # Add parachute
-    Main = Valetudo.addParachute(
+    Main = SporadicImpulse.addParachute(
         'Main',
        CdS=setting['CdSMain'],
        trigger=mainTrigger,
@@ -265,7 +265,7 @@ for setting in flight_settings(analysis_parameters, number_of_simulations):
     # Run trajectory simulation
     try:
         TestFlight = Flight(
-            rocket=Valetudo,
+            rocket=SporadicImpulse,
             environment=Env,
             inclination=setting['inclination'],
             heading=setting['heading'],
@@ -296,7 +296,7 @@ dispersion_error_file.close()
 
 
 
-filename = 'dispersion_analysis_outputs/valetudo_rocket_v0'
+filename = 'dispersion_analysis_outputs/SporadicImpulse_rocket_v0'
 
 # Initialize variable to store all results
 dispersion_general_results = []
@@ -397,7 +397,7 @@ plt.xlabel('Altitude (m)')
 plt.ylabel('Number of Occurences')
 plt.show()
 
-# Real measured apogee for Valetudo = 860 m
+# Real measured apogee for SporadicImpulse = 860 m
 
 #Apogee X Position
 print(f'Apogee X Position -         Mean Value: {np.mean(dispersion_results["apogeeX"]):0.3f} m')
@@ -534,7 +534,7 @@ from imageio import imread
 from matplotlib.patches import Ellipse
 
 # Import background map
-img = imread("dispersion_analysis_inputs/Valetudo_basemap_final.jpg")
+img = imread("dispersion_analysis_inputs/SporadicImpulse_basemap_final.jpg")
 
 # Retrieve dispersion data por apogee and impact XY position
 apogeeX = np.array(dispersion_results['apogeeX'])
