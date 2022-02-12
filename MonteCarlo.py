@@ -26,15 +26,15 @@ analysis_parameters = {
 
     # Propulsion Details - run help(SolidMotor) for more information
     # Sporadic Impulse values of 08/02/22 (impulse, burnOut)
-    "impulse": (14070, 35.3),                         # Motor total impulse (N*s)
+    "impulse": (14070, 35.3),                         # Motor total impulse (N*s) +- 500 Ns
     "burnOut": (14.3, 1),                              # Motor burn out time (s)
-    "nozzleRadius": (21.642/1000, 0.5/1000),            # Motor's nozzle radius (m)
-    "throatRadius": (8/1000, 0.5/1000) ,                # Motor's nozzle throat radius (m)
-    "grainSeparation": (6/1000, 1/1000),                # Motor's grain separation (axial distance between two grains) (m)
-    "grainDensity": (1707, 50),                         # Motor's grain density (kg/m^3)
-    "grainOuterRadius": (21.4/1000, 0.375/1000),        # Motor's grain outer radius (m)
-    "grainInitialInnerRadius": (9.65/1000, 0.375/1000), # Motor's grain inner radius (m)
-    "grainInitialHeight": (120/1000, 1/1000),           # Motor's grain height (m)
+    "nozzleRadius": (19.85/1000, 0.5/1000),            # Motor's nozzle radius (m) 39.7 mm diam
+    "throatRadius": (8.8/1000, 0.5/1000) ,                # Motor's nozzle throat radius (m) 8.8mm 17.6 diam
+    "grainSeparation": (0.1/1000, 1/1000),                # Motor's grain separation (axial distance between two grains) (m) 0.1mm
+    "grainDensity": (860, 50),                         # Motor's grain density (kg/m^3) 860kgm-3
+    "grainOuterRadius": (38.95/1000, 0.375/1000),        # Motor's grain outer radius (m) 77.9/2mm
+    "grainInitialInnerRadius": (13.5/1000, 0.375/1000), # Motor's grain inner radius (m) 27/2mm
+    "grainInitialHeight": (140/1000, 1/1000),           # Motor's grain height (m) 14cm
 
     # Aerodynamic Details - run help(Rocket) for more information
     "inertiaI": (3.675, 0.03675),                       # Rocket's inertia moment perpendicular to its axis (kg*m^2)
@@ -46,9 +46,9 @@ analysis_parameters = {
     "powerOnDrag": (0.9081/1.05, 0.033),                # Multiplier for rocket's drag curve. Usually has a mean value of 1 and a uncertainty of 5% to 10%
     "noseLength": (0.274, 0.001),                       # Rocket's nose cone length (m)
     "noseDistanceToCM": (1.134, 0.001),                 # Axial distance between rocket's center of dry mass and nearest point in its nose cone (m)
-    "finSpan": (0.077, 0.0005),                         # Fin span (m)
-    "finRootChord": (0.058, 0.0005),                    # Fin root chord (m)
-    "finTipChord": (0.018, 0.0005),                     # Fin tip chord (m)
+    "finSpan": (0.15, 0.0005),                         # Fin span (m) 150mm, 
+    "finRootChord": (0.304, 0.0005),                    # Fin root chord (m) 304mm
+    "finTipChord": (0.152, 0.0005),                     # Fin tip chord (m) 152mm
     "finDistanceToCM": (-0.906, 0.001),                 # Axial distance between rocket's center of dry mass and nearest point in its fin (m)
 
     # Launch and Environment Details - run help(Environment) and help(Flight) for more information
@@ -534,7 +534,7 @@ from imageio import imread
 from matplotlib.patches import Ellipse
 
 # Import background map
-img = imread("dispersion_analysis_inputs/SporadicImpulse_basemap_final.jpg")
+img = imread("dispersion_analysis_inputs/SporadicImpulse_basemap_final_2.jpg")
 
 # Retrieve dispersion data por apogee and impact XY position
 apogeeX = np.array(dispersion_results['apogeeX'])
@@ -605,8 +605,8 @@ dy = 0
 plt.imshow(img,zorder=0, extent=[-1000-dx, 1000-dx, -1000-dy, 1000-dy])
 plt.axhline(0, color='black', linewidth=0.5)
 plt.axvline(0, color='black', linewidth=0.5)
-plt.xlim(-100, 700)
-plt.ylim(-300, 300)
+plt.xlim(-1000, 1000)
+plt.ylim(-1000, 1000)
 
 # Save plot and show result
 plt.savefig(str(filename)+ '.pdf', bbox_inches='tight', pad_inches=0)
