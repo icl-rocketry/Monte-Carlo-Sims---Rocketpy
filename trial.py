@@ -10,10 +10,10 @@ from IPython.display import display
 
 # ------------------------------------------------------------------------ Environment Setting
 Env = Environment(
-    railLength=5.2,
-    latitude=32.990254,
-    longitude=-106.974998,
-    elevation=1400
+    railLength=12,
+    latitude=-23.363611,
+    longitude=-48.011389,
+    elevation=668
 )
 
 # import datetime
@@ -33,9 +33,9 @@ URL = 'https://rucsoundings.noaa.gov/get_raobs.cgi?data_source=RAOB&latest=lates
 Env.setAtmosphericModel(type='NOAARucSounding', file=URL)
 
 # --------------------------------------------------------------------------Motor Setting
-Pro75M1670 = SolidMotor(
+Hypnos = SolidMotor(
     thrustSource="Cesaroni_M1670.eng",
-    burnOut=3.9,
+    burnOut=14.3,
     grainNumber=5,
     grainSeparation=5/1000,
     grainDensity=1815,
@@ -47,11 +47,11 @@ Pro75M1670 = SolidMotor(
     interpolationMethod='linear'
 )
 
-# Pro75M1670.info()
+# Hypnos.info()
 
 # ------------------------------------------------------------------------Initializing Rocket
-Calisto = Rocket(
-    motor=Pro75M1670,
+SporadicImpulse = Rocket(
+    motor=Hypnos,
     radius=127/2000,
     mass=19.197-2.956,
     inertiaI=6.60,
@@ -62,16 +62,16 @@ Calisto = Rocket(
     powerOnDrag='powerOffDragCurve.csv'
 )
 
-Calisto.setRailButtons([0.2, -0.5])
+SporadicImpulse.setRailButtons([0.2, -0.5])
 # help(Function)
 
 
 # -----------------------------------------------------------------------Aerodynamic Surfaces
-NoseCone = Calisto.addNose(length=0.55829, kind="vonKarman", distanceToCM=0.71971)
+NoseCone = SporadicImpulse.addNose(length=0.55829, kind="vonKarman", distanceToCM=0.71971)
 
-FinSet = Calisto.addFins(4, span=0.100, rootChord=0.120, tipChord=0.040, distanceToCM=-1.04956)
+FinSet = SporadicImpulse.addFins(4, span=0.100, rootChord=0.120, tipChord=0.040, distanceToCM=-1.04956)
 
-Tail = Calisto.addTail(topRadius=0.0635, bottomRadius=0.0435, length=0.060, distanceToCM=-1.194656)
+Tail = SporadicImpulse.addTail(topRadius=0.0635, bottomRadius=0.0435, length=0.060, distanceToCM=-1.194656)
 
 
 # -----------------------------------------------------------------------Parachute Parameters 
@@ -87,26 +87,26 @@ def mainTrigger(p, y):
     # activate main when vz < 0 m/s and z < 800 m.  
     return True if y[5] < 0 and y[2] < 800 else False
 
-Main = Calisto.addParachute('Main',
+Main = SporadicImpulse.addParachute('Main',
                             CdS=10.0,
                             trigger=mainTrigger,
                             samplingRate=105,
                             lag=1.5,
                             noise=(0, 8.3, 0.5))
 
-Drogue = Calisto.addParachute('Drogue',
+Drogue = SporadicImpulse.addParachute('Drogue',
                               CdS=1.0,
                               trigger=drogueTrigger,
                               samplingRate=105,
                               lag=1.5,
                               noise=(0, 8.3, 0.5))
 
-Calisto.parachutes.remove(Drogue)
-Calisto.parachutes.remove(Main)
+SporadicImpulse.parachutes.remove(Drogue)
+SporadicImpulse.parachutes.remove(Main)
 
 
 # ----------------------------------------------------------------------Flight Test
-TestFlight = Flight(rocket=Calisto, environment=Env, inclination=85, heading=0)
+TestFlight = Flight(rocket=SporadicImpulse, environment=Env, inclination=85, heading=0)
 TestFlight.allInfo()
 
 # --------------------------------------------------------------------Test Monte Carlo
