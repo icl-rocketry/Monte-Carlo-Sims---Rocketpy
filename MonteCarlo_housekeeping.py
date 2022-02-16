@@ -22,13 +22,13 @@ mpl.rcParams['figure.titlesize'] = 14
 
 analysis_parameters = {
     # Mass Details
-    "rocketMass": (42.590, 0.001), # Rocket's dry mass (kg) and its uncertainty (standard deviation)
+    "rocketMass": (48.276, 0.001), # Rocket's dry mass (kg) and its uncertainty (standard deviation)
 
     # Propulsion Details - run help(SolidMotor) for more information
-    # Sporadic Impulse values of 08/02/22 (impulse, burnOut)
-    "impulse": (14070, 500),                         # Motor total impulse (N*s) +- 500 Ns
+    # Sporadic Impulse values of 12/02/22 (Everything)
+    "impulse": (14070, 500),                         # Motor total impulse (N*s) 
     "burnOut": (14.3, 1),                              # Motor burn out time (s)
-    "nozzleRadius": (19.85/1000, 0.5/1000),            # Motor's nozzle radius (m) 39.7 mm diam
+    "nozzleRadius": (19.85/1000, 0.5/1000),            # Motor's nozzle radius (m) 
     "throatRadius": (8.8/1000, 0.5/1000) ,                # Motor's nozzle throat radius (m) 8.8mm 17.6 diam
     "grainSeparation": (0.1/1000, 1/1000),                # Motor's grain separation (axial distance between two grains) (m) 0.1mm
     "grainDensity": (860, 50),                         # Motor's grain density (kg/m^3) 860kgm-3
@@ -37,36 +37,37 @@ analysis_parameters = {
     "grainInitialHeight": (140/1000, 1/1000),           # Motor's grain height (m) 14cm
 
     # Aerodynamic Details - run help(Rocket) for more information
-    "inertiaI": (3.675, 0.03675),                       # Rocket's inertia moment perpendicular to its axis (kg*m^2)
-    "inertiaZ": (0.007, 0.00007),                       # Rocket's inertia moment relative to its axis (kg*m^2)
-    "radius": (164/1000, 0.001),                      # Rocket's radius (kg*m^2)
+    # Sporadic Impulse values of 12/02/22 (Everything)
+    "inertiaI": (17.8551, 0.1),                       # Rocket's inertia moment perpendicular to its axis (kg*m^2) (Solid Cylinder approximation)
+    "inertiaZ": (0.00002902, 0.000001),                       # Rocket's inertia moment relative to its axis (kg*m^2) (Solid Cylinder approximation)
+    "radius": (156/1000, 0.001),                      # Rocket's radius (kg*m^2)
     "distanceRocketNozzle": (-2.03,0.001),             # Distance between rocket's center of dry mass and nozzle exit plane (m) (negative)
     "distanceRocketPropellant": (-0.571,0.001),         # Distance between rocket's center of dry mass and and center of propellant mass (m) (negative)
-    "powerOffDrag": (0.9081/1.05, 0.033),               # Multiplier for rocket's drag curve. Usually has a mean value of 1 and a uncertainty of 5% to 10%
-    "powerOnDrag": (0.9081/1.05, 0.033),                # Multiplier for rocket's drag curve. Usually has a mean value of 1 and a uncertainty of 5% to 10%
+    "powerOffDrag": (1, 0.033),               # Multiplier for rocket's drag curve. Usually has a mean value of 1 and a uncertainty of 5% to 10% (unchanged for Sporadic Impulse)
+    "powerOnDrag": (1, 0.033),                # Multiplier for rocket's drag curve. Usually has a mean value of 1 and a uncertainty of 5% to 10% (unchanged for Sporadic Impulse)
     "noseLength": (0.468, 0.001),                       # Rocket's nose cone length (m)
-    "noseDistanceToCM": (1.134, 0.001),                 # Axial distance between rocket's center of dry mass and nearest point in its nose cone (m)
+    "noseDistanceToCM": (2.442, 0.001),                 # Axial distance between rocket's center of dry mass and nearest point in its nose cone (m)
     "finSpan": (0.15, 0.0005),                         # Fin span (m) 150mm, 
     "finRootChord": (0.304, 0.0005),                    # Fin root chord (m) 304mm
     "finTipChord": (0.152, 0.0005),                     # Fin tip chord (m) 152mm
     "finDistanceToCM": (-0.906, 0.001),                 # Axial distance between rocket's center of dry mass and nearest point in its fin (m)
 
     # Launch and Environment Details - run help(Environment) and help(Flight) for more information
-    # Sporadic Impulse values of 08/02/22 (inclanation, heading, rail length)
+    # Sporadic Impulse values of 12/02/22 (Everything)
     "inclination": (85, 1),                           # Launch rail inclination angle relative to the horizontal plane (degrees)
     "heading": (90, 2),                                 # Launch rail heading relative to north (degrees)
     "railLength": (12 , 0.0005),                       # Launch rail length (m)
     "ensembleMember": list(range(10)),                  # Members of the ensemble forecast to be used
 
-    # Parachute Details - run help(Rocket) for more information
+    # Drogue Parachute Details - run help(Rocket) for more information
     # Sporadic Impulse values of 08/02/22 (CdSDrogue)
     "CdSDrogue": (0.9*0.656, 0.07),                     # Drag coefficient times reference area for the drogue chute (m^2)
     "lag_rec": (1 , 0.5),                               # Time delay between parachute ejection signal is detected and parachute is inflated (s)
     
-    # Parachute Details - run help(Rocket) for more information
+    # Main Parachute Details - run help(Rocket) for more information
     # Sporadic Impulse values of 08/02/22 (CdSDrogue)
     "CdSMain": (0.9*0.656, 0.07),                     # Drag coefficient times reference area for the drogue chute (m^2)
-    #"lag_rec": (1 , 0.5),                               # Time delay between parachute ejection signal is detected and parachute is inflated (s)
+    "lag_rec": (1 , 0.5),                               # Time delay between parachute ejection signal is detected and parachute is inflated (s)
 
     # Electronic Systems Details - run help(Rocket) for more information
     "lag_se": (0.73, 0.16)                              # Time delay between sensor signal is received and ejection signal is fired (s)
@@ -147,7 +148,7 @@ def export_flight_error(flight_setting):
 
 # Basic analysis info
 filename = 'dispersion_analysis_outputs/SporadicImpulse_rocket_v0'
-number_of_simulations = 5
+number_of_simulations = 10
 # Create data files for inputs, outputs and error logging
 dispersion_error_file = open(str(filename)+'.disp_errors.txt', 'w')
 dispersion_input_file = open(str(filename)+'.disp_inputs.txt', 'w')
