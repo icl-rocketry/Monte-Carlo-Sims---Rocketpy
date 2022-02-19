@@ -35,43 +35,43 @@ Env.setAtmosphericModel(type='NOAARucSounding', file=URL)
 # --------------------------------------------------------------------------Motor Setting
 Hypnos = SolidMotor(
     thrustSource="ThrustyBoi.eng",
-    burnOut=14.3,
-    grainNumber=5,
-    grainSeparation=5/1000,
-    grainDensity=1815,
-    grainOuterRadius=33/1000,
-    grainInitialInnerRadius=15/1000,
-    grainInitialHeight=120/1000,
-    nozzleRadius=33/1000,
-    throatRadius=11/1000,
+    burnOut=14.3,#
+    grainNumber=6,#
+    grainSeparation=0.1/1000,#
+    grainDensity=860,#
+    grainOuterRadius=38.95/1000,#
+    grainInitialInnerRadius=13.5/1000,#
+    grainInitialHeight=140/1000,#
+    nozzleRadius=19.85/1000,#
+    throatRadius=8.8/1000,#
     interpolationMethod='linear'
 )
 
 # Hypnos.info()
-
+#Motor Setting Pass
 # ------------------------------------------------------------------------Initializing Rocket
 SporadicImpulse = Rocket(
     motor=Hypnos,
-    radius=127/2000,
-    mass=19.197-2.956,
-    inertiaI=6.60,
-    inertiaZ=0.0351,
-    distanceRocketNozzle=-1.255,
-    distanceRocketPropellant=-0.85704,
-    powerOffDrag='powerOffDragCurve.csv',
-    powerOnDrag='powerOffDragCurve.csv'
+    radius=156/2000,#
+    mass=48.276,#
+    inertiaI=17.081,#
+    inertiaZ=0.00351,#
+    distanceRocketNozzle=-2.03,#
+    distanceRocketPropellant=-0.571,#
+    powerOffDrag='powerOffDragCurve.csv',#
+    powerOnDrag='powerOffDragCurve.csv'#
 )
 
 SporadicImpulse.setRailButtons([0.2, -0.5])
 # help(Function)
-
+# Rocket Pass
 
 # -----------------------------------------------------------------------Aerodynamic Surfaces
-NoseCone = SporadicImpulse.addNose(length=0.55829, kind="vonKarman", distanceToCM=0.71971)
+NoseCone = SporadicImpulse.addNose(length=0.468, kind="vonKarman", distanceToCM=2.442)
 
-FinSet = SporadicImpulse.addFins(4, span=0.100, rootChord=0.120, tipChord=0.040, distanceToCM=-1.04956)
+FinSet = SporadicImpulse.addFins(4, span=0.15, rootChord=0.304, tipChord=0.152, distanceToCM=-0.906)
 
-Tail = SporadicImpulse.addTail(topRadius=0.0635, bottomRadius=0.0435, length=0.060, distanceToCM=-1.194656)
+#Tail = SporadicImpulse.addTail(topRadius=0.0635, bottomRadius=0.0435, length=0.060, distanceToCM=-1.194656)
 
 
 # -----------------------------------------------------------------------Parachute Parameters 
