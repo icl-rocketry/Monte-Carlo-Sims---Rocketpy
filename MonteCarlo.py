@@ -12,6 +12,10 @@ from IPython.display import display
 # %config InlineBackend.figure_formats = ['svg']
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+
+#Timer
+tic = perf_counter()
+
 # %matplotlib inline
 mpl.rcParams['figure.figsize'] = [8, 5]
 mpl.rcParams['figure.dpi'] = 120
@@ -139,7 +143,7 @@ def export_flight_error(flight_setting):
 
 # Basic analysis info
 filename = 'dispersion_analysis_outputs/valetudo_rocket_v0'
-number_of_simulations = 10
+number_of_simulations = 50
 # Create data files for inputs, outputs and error logging
 dispersion_error_file = open(str(filename)+'.disp_errors.txt', 'w')
 dispersion_input_file = open(str(filename)+'.disp_inputs.txt', 'w')
@@ -503,6 +507,10 @@ plt.title('Drogue Parachute Fully Inflated Time')
 plt.xlabel('Time (s)')
 plt.ylabel('Number of Occurences')
 plt.show()
+
+#Program run time
+toc = perf_counter()
+print(f"Ran program in {toc - tic:0.4f} seconds")
 
 #Error Ellipses
 # Import libraries
